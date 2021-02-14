@@ -7,3 +7,12 @@ object Constants {
 enum class SEARCH_TYPE {
     PHOTO, USER
 }
+
+object Api {
+    const val BASE_URL = "https://api.unsplash.com/" //BASE_URL
+
+    const val CLIENT_ID = "" //api key
+
+    const val SEARCH_PHOTOS = "/search/photos"
+    const val SEARCH_USERS = " /search/users"
+}
