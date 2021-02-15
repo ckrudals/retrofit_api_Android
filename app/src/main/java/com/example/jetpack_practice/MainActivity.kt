@@ -12,6 +12,8 @@ import android.view.View
 import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
 import com.example.jetpack_practice.utils.Constants.TAG
+import com.example.jetpack_practice.utils.RESPONSE_STATE
+import com.example.jetpack_practice.utils.RetrofitManager
 import com.example.jetpack_practice.utils.SEARCH_TYPE
 import com.example.jetpack_practice.utils.onMyTextChanged
 import kotlinx.android.synthetic.main.activity_main.*
@@ -74,9 +76,23 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(applicationContext, "최대 12글자 까지 입력이 가능합니다.! ", LENGTH_SHORT).show()
             }
         }
-        // 버튼 이벤트
+        // 검색  버튼 이벤트
         btn_search.setOnClickListener {
             Log.d(TAG, "onCreate: 검색 버튼 클릭")
+
+            RetrofitManager.instance.searchPhotos(searchTerm = search_edit_text.toString(),completion = {
+                responseState, responseBody ->
+
+                when(responseState){
+                    RESPONSE_STATE.OKAY->{
+                        Log.d(TAG, "Api 호출 성공 : $responseBody")
+                    }
+                    RESPONSE_STATE.FAIL->{
+                        Toast.makeText(this,"API 호출 에러",Toast.LENGTH_SHORT).show()
+                        Log.d(TAG, "Api 호출 실패 : $responseBody")
+                    }
+                }
+            })
             this.handleSearchButton()
         }
     }
