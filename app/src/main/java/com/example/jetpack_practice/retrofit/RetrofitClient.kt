@@ -1,6 +1,10 @@
 package com.example.jetpack_practice.retrofit
 
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
+import android.widget.Toast
+import com.example.jetpack_practice.App
 import com.example.jetpack_practice.utils.Api
 import com.example.jetpack_practice.utils.Constants.TAG
 import com.example.jetpack_practice.utils.isJsonArray
@@ -78,12 +82,22 @@ object RetrofitClient {
                         .method(originalRequest.method, originalRequest.body)
                         .build()
 
-                return chain.proceed(finalRequest)
+
+                val response = chain.proceed(finalRequest)
+                if (response.code != 200) {
+                    Handler(Looper.getMainLooper()).post {
+
+
+                        Toast.makeText(App.instance, "${response.code}에러 입니다.", Toast.LENGTH_SHORT)
+                    }
+
+                }
+                return response
             }
 
         })
 
-    //okhttp는 뭐지?
+        //okhttp는 뭐지?
         // 위에서 설정한 기본파라미터 인터셉터를 okhttp 클라이언트에 추가한다.
         client.addInterceptor(baseParaMeterInterceptor)
 
@@ -92,9 +106,9 @@ object RetrofitClient {
         //10초동안 반응이 없으시 종료
         client.connectTimeout(10, TimeUnit.SECONDS)
         // ;; 읽음
-        client.readTimeout(10,TimeUnit.SECONDS)
+        client.readTimeout(10, TimeUnit.SECONDS)
         // ;; 씀
-        client.writeTimeout(10,TimeUnit.SECONDS)
+        client.writeTimeout(10, TimeUnit.SECONDS)
         // 실패햇을때 재시도 여부
         client.retryOnConnectionFailure(true)
         // 디자인 패턴 - 빌더패턴

@@ -1,6 +1,7 @@
 package com.example.jetpack_practice
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -80,16 +81,29 @@ class MainActivity : AppCompatActivity() {
         btn_search.setOnClickListener {
             Log.d(TAG, "onCreate: 검색 버튼 클릭")
 
-            RetrofitManager.instance.searchPhotos(searchTerm = search_edit_text.toString(),completion = {
-                responseState, responseBody ->
+            val userSearchinput=search_edit_text.text.toString()
+            RetrofitManager.instance.searchPhotos(searchTerm = search_edit_text.text.toString(),completion = {
+                responseState, responseBodyDataArrayList ->
 
                 when(responseState){
                     RESPONSE_STATE.OKAY->{
-                        Log.d(TAG, "Api 호출 성공 : $responseBody")
+                        Log.d(TAG, "Api 호출 성공 : ${responseBodyDataArrayList?.size}")
+
+                        val intent= Intent(this,PhotoCollectionActivity::class.java)
+
+                        val bundle=Bundle()
+                        bundle.putSerializable("photo_array_list",responseBodyDataArrayList) //직렬화 방식
+
+                        intent.putExtra("array_bundle",bundle) //데이터
+
+                        intent.putExtra("search_term",userSearchinput) //검색어
+
+                        startActivity(intent)
                     }
+
                     RESPONSE_STATE.FAIL->{
                         Toast.makeText(this,"API 호출 에러",Toast.LENGTH_SHORT).show()
-                        Log.d(TAG, "Api 호출 실패 : $responseBody")
+                        Log.d(TAG, "Api 호출 실패 : $responseBodyDataArrayList")
                     }
                 }
             })
