@@ -12,12 +12,14 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
+import com.example.jetpack_practice.R.id.search_photo_radio_button
 import com.example.jetpack_practice.utils.Constants.TAG
 import com.example.jetpack_practice.utils.RESPONSE_STATE
 import com.example.jetpack_practice.utils.RetrofitManager
 import com.example.jetpack_practice.utils.SEARCH_TYPE
 import com.example.jetpack_practice.utils.onMyTextChanged
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_recyclerview.*
 import kotlinx.android.synthetic.main.layout_button_search.*
 
 class MainActivity : AppCompatActivity() {
@@ -31,6 +33,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         Log.d(TAG, "onCreate: called")
+
 
         // 라디오 그룹 가져오기
         search_radio_group.setOnCheckedChangeListener { _, checkedId ->
